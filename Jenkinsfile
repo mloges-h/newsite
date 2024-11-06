@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Running the container in detached mode
-                    sh "docker run -d -p 8080:80 ${DOCKER_IMAGE}"
+                    sh "docker run -d -p 8082:80 ${DOCKER_IMAGE}"
                 }
             }
         }
