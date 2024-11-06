@@ -28,7 +28,7 @@ pipeline {
                 script {
                     docker.image(DOCKER_IMAGE).inside("-p 8082:80") {
                         // Run any commands needed to test or validate the container
-                        sh 'curl http://localhost:80'
+                        sh 'curl http://localhost:8082'
                     }
                 }
             }
