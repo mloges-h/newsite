@@ -26,7 +26,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image(DOCKER_IMAGE).inside("-p 8081:80") {
+                    docker.image(DOCKER_IMAGE).inside("-p 8082:80") {
                         // Run any commands needed to test or validate the container
                         sh 'curl http://localhost:80'
                     }
