@@ -5,5 +5,5 @@ services:
     image: my-apache-html
     build: .
     ports:
-      - "8080:80"
+      - "8082:80"
     container_name: apache-container
