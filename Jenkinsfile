@@ -5,6 +5,11 @@ pipeline {
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
     }
 
+    triggers {
+        // Poll for changes every minute as a fallback
+        pollSCM('* * * * *')
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
