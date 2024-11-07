@@ -1,14 +1,24 @@
 pipeline {
     agent any
 
+    environment {
+        REPO_URL = 'https://github.com/mloges-h/newsite.git'
+    }
+
     stages {
-        stage('Build and Deploy') {
+        stage('Checkout Code') {
+            steps {
+                // Explicitly check out the latest code from the GitHub repository
+                git url: "${REPO_URL}", branch: 'master'
+            }
+        }
+
+        stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
-                    // Stop and remove any existing container
-                    sh 'docker-compose down'  
-                    // Build and start the new container in detached mode
-                    sh 'docker-compose up -d'  
+                    // Stop any existing container and start a new one with the latest code
+                    sh 'docker-compose down'
+                    sh 'docker-compose up -d --build' // Rebuild to ensure changes are applied
                 }
             }
         }
@@ -16,7 +26,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Clean workspace to keep things tidy
+            cleanWs()  // Clean up the workspace after each build
         }
         success {
             echo 'Deployment was successful!'
