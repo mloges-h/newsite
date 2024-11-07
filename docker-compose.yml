@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   web:
-    build: .  # Build the image using your Dockerfile in the current directory
+    build: .  # Build the image using the Dockerfile in the current directory
     ports:
       - "80:80"  # Map container's port 80 to host's port 80
     restart: always
