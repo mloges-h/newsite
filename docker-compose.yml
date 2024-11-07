@@ -6,5 +6,5 @@ services:
     ports:
       - "80:80"  # Map container's port 80 to host's port 80
     volumes:
-      - ./mnt:/usr/local/apache2/htdocs/  # Mount the directory containing your website files to Apache's document root
+      - /mnt/newsite:/usr/local/apache2/htdocs/  # Mount the directory containing your website files to Apache's document root
     restart: always
