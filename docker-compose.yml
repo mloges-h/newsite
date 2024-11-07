@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   web:
-    image: httpd:latest  # Use Apache HTTP server
+    build: .  # This will build from the Dockerfile in the current directory
     ports:
       - "80:80"  # Map container's port 80 to host's port 8082
     volumes:
