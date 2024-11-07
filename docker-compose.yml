@@ -1,9 +1,11 @@
 version: '3.3'
 
 services:
-  apache-server:
-    image: my-apache-html
-    build: .
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Make sure you have a Dockerfile in your project root
+    image: my-html-css-website:latest  # Set a name for the image
     ports:
-      - "8082:80"
-    container_name: apache-container
+      - "8082:80"  # Expose the website on port 8082
+    restart: always  # Ensure the container restarts on server reboot or failure
