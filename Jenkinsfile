@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/your-username/your-repo.git'  // Replace with your GitHub repository URL
+        REPO_URL = 'https://github.com/mloges-h/newsite.git'  // Replace with your GitHub repository URL
     }
 
     stages {
