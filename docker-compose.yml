@@ -2,19 +2,9 @@ version: '3.3'
 
 services:
   web:
-    image: httpd:latest  # Use Apache HTTP server
+    build: .  # Build the image using your Dockerfile in the current directory
     ports:
-      - "80:80"  # Map container's port 80 to host's port 8082
+      - "80:80"  # Map container's port 80 to host's port 80
     volumes:
-      - ./mnt:/usr/local/apache2/htdocs/  # Mount the local directory to Apache's document root
+      - ./mnt:/usr/local/apache2/htdocs/  # Mount the directory containing your website files to Apache's document root
     restart: always
-
-  git-sync:
-    image: alpine:latest  # Use a lightweight Alpine image for Git
-    command: >
-      sh -c "apk add --no-cache git && rm -rf /usr/local/apache2/htdocs/* && git clone https://github.com/yourusername/your-repo.git /usr/local/apache2/htdocs/"
-    volumes:
-      - ./mnt:/usr/local/apache2/htdocs/  # Mount the shared volume to store the cloned files
-    depends_on:
-      - web
-    restart: "no"
