@@ -1,24 +1,14 @@
 pipeline {
     agent any
 
-    environment {
-        REPO_URL = 'https://github.com/mloges-h/newsite.git'  // Replace with your GitHub repository URL
-    }
-
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Clone the latest code from the GitHub repository
-                git url: "${REPO_URL}", branch: 'master'
-            }
-        }
-
-        stage('Deploy with Docker Compose') {
+        stage('Build and Deploy') {
             steps {
                 script {
-                    // Bring down any existing container and then start a new one with the updated files
-                    sh 'docker-compose down'  // Stop the existing container
-                    sh 'docker-compose up -d'  // Start the new container in detached mode
+                    // Stop and remove any existing container
+                    sh 'docker-compose down'  
+                    // Build and start the new container in detached mode
+                    sh 'docker-compose up -d'  
                 }
             }
         }
