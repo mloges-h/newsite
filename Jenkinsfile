@@ -13,13 +13,14 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git url: "${REPO_URL}", branch: 'master'
+                git url: "${REPO_URL}", branch: 'master', credentialsId: 'pro1'
             }
         }
 
         stage('Verify Docker and Docker Compose') {
             steps {
                 script {
+                    echo 'Verifying Docker and Docker Compose installation...'
                     sh 'docker --version'
                     sh 'docker-compose --version'
                 }
@@ -29,6 +30,7 @@ pipeline {
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
+                    echo 'Building and deploying application with Docker Compose...'
                     sh 'docker-compose down || true' // Ignore errors if no containers are running
                     sh 'docker-compose up -d --build'
                 }
@@ -38,13 +40,14 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Clean workspace
+            echo 'Cleaning up workspace...'
+            cleanWs()
         }
         success {
             echo 'Deployment was successful!'
         }
         failure {
-            echo 'Deployment failed.'
+            echo 'Deployment failed. Check the logs for details.'
         }
     }
 }
