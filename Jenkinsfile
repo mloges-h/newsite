@@ -4,27 +4,17 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
         PATH = "${env.PATH}:/usr/local/bin"
-        LAUNCH_DIAGNOSTICS = '-Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true' // Enable diagnostics
     }
 
     triggers {
-        githubPush() // Use webhook for better efficiency
+        githubPush() // Trigger pipeline on push to GitHub repository
     }
 
     stages {
         stage('Checkout Code') {
             steps {
+                // Checkout the code from the repository
                 git url: "${REPO_URL}", branch: 'master', credentialsId: 'pro1'
-            }
-        }
-
-        stage('Verify Docker and Docker Compose') {
-            steps {
-                script {
-                    echo 'Verifying Docker and Docker Compose installation...'
-                    sh '/bin/bash -c "docker --version"'
-                    sh '/bin/bash -c "docker-compose --version"'
-                }
             }
         }
 
@@ -32,7 +22,8 @@ pipeline {
             steps {
                 script {
                     echo 'Running application tests...'
-                    sh '/bin/bash -c "npm test"' // Replace with your test command
+                    // Run your tests (replace with the actual test command)
+                    sh 'npm test'
                 }
             }
         }
@@ -41,9 +32,12 @@ pipeline {
             steps {
                 script {
                     echo 'Building and deploying application with Docker Compose...'
-                    sh '/bin/bash -c "docker-compose down || true"' // Stop and remove containers
-                    sh '/bin/bash -c "docker-compose up -d --build"' // Build and start containers
-                    sh '/bin/bash -c "docker-compose logs"' // Show logs
+                    // Stop and remove existing containers (if any)
+                    sh 'docker-compose down || true'
+                    // Build and start containers in detached mode
+                    sh 'docker-compose up -d --build'
+                    // Show logs of the Docker Compose containers
+                    sh 'docker-compose logs'
                 }
             }
         }
@@ -52,7 +46,7 @@ pipeline {
             steps {
                 script {
                     echo 'Sending deployment metrics to Prometheus...'
-                    // Add Prometheus or monitoring notifications here
+                    // You can add your monitoring notification logic here
                 }
             }
         }
@@ -61,6 +55,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
+            // Clean up the workspace after each run
             cleanWs()
         }
         success {
