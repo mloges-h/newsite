@@ -1,24 +1,32 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/mloges-h/newsite.git'
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/mloges-h/newsite.git'
             }
         }
-        stage('Build') {
+
+        stage('Build Website Container') {
             steps {
-                script {
-                    docker.build('newsite-image', '.')
-                }
+                echo 'Building website container...'
+                sh 'docker build -t website-image .'
             }
         }
-        stage('Deploy') {
+
+        stage('Run Website Container') {
             steps {
-                script {
-                    docker.image('newsite-image').run()
-                }
+                echo 'Deploying website container...'
+                sh 'docker run -d --name website -p 8080:80 website-image'
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+    }
 }
