@@ -6,14 +6,14 @@ pipeline {
     }
 
     triggers {
-        // Poll for changes every minute as a fallback
+        // Poll SCM every minute to check for updates
         pollSCM('* * * * *')
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Explicitly check out the latest code from the GitHub repository
+                // Check out the code from the specified repository and branch
                 git url: "${REPO_URL}", branch: 'master'
             }
         }
@@ -21,9 +21,11 @@ pipeline {
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
-                    // Stop any existing container and start a new one with the latest code
-                    sh 'docker-compose down'
-                    sh 'docker-compose up -d --build' // Rebuild to ensure changes are applied
+                    // Stop any running containers and deploy the latest version with rebuild
+                    sh '''
+                    docker-compose down
+                    docker-compose up -d --build
+                    '''
                 }
             }
         }
@@ -31,13 +33,14 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Clean up the workspace after each build
+            // Clean up workspace to avoid leftover files
+            cleanWs()
         }
         success {
             echo 'Deployment was successful!'
         }
         failure {
-            echo 'Deployment failed.'
+            echo 'Deployment failed. Please check the logs.'
         }
     }
 }
