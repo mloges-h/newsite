@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
-        PATH = "${env.PATH}:/usr/local/bin"
+        PATH = "${env.PATH}:/usr/local/bin"  // Ensure Docker and Docker Compose are in the PATH
     }
 
     triggers {
-        githubPush() // Use webhook for better efficiency
+        githubPush()  // Use webhook to trigger on GitHub push
     }
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running application tests...'
-                    sh 'npm test' // Update with your test command
+                    sh 'npm test'  // Adjust based on your testing framework
                 }
             }
         }
@@ -40,8 +40,16 @@ pipeline {
             steps {
                 script {
                     echo 'Building and deploying application with Docker Compose...'
+                    // Ensure the containers are stopped before rebuilding
                     sh 'docker-compose down || true'
+                    
+                    // Build and start the containers in detached mode
                     sh 'docker-compose up -d --build'
+                    
+                    // Show the status of the containers
+                    sh 'docker-compose ps'
+                    
+                    // Output logs for troubleshooting
                     sh 'docker-compose logs'
                 }
             }
@@ -51,7 +59,7 @@ pipeline {
             steps {
                 script {
                     echo 'Sending deployment metrics to Prometheus...'
-                    // Add monitoring hook here
+                    // You can add logic to send metrics to Prometheus here if needed
                 }
             }
         }
@@ -60,7 +68,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            cleanWs()
+            cleanWs()  // Clean the workspace after each build
         }
         success {
             echo 'Deployment was successful!'
