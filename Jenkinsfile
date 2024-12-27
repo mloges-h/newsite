@@ -3,27 +3,34 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
+        PATH = "${env.PATH}:/usr/local/bin" // Ensure Docker Compose is in the PATH
     }
 
     triggers {
-        // Poll for changes every minute as a fallback
-        pollSCM('* * * * *')
+        pollSCM('* * * * *') // Poll for changes every minute
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Explicitly check out the latest code from the GitHub repository
                 git url: "${REPO_URL}", branch: 'master'
+            }
+        }
+
+        stage('Verify Docker and Docker Compose') {
+            steps {
+                script {
+                    sh 'docker --version'
+                    sh 'docker-compose --version'
+                }
             }
         }
 
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
-                    // Stop any existing container and start a new one with the latest code
-                    sh 'docker-compose down'
-                    sh 'docker-compose up -d --build' // Rebuild to ensure changes are applied
+                    sh 'docker-compose down || true' // Ignore errors if no containers are running
+                    sh 'docker-compose up -d --build'
                 }
             }
         }
@@ -31,7 +38,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Clean up the workspace after each build
+            cleanWs()  // Clean workspace
         }
         success {
             echo 'Deployment was successful!'
