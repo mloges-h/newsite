@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
-        PATH = "${env.PATH}:/usr/local/bin" // Ensure Docker Compose is in the PATH
+        PATH = "${env.PATH}:/usr/local/bin"
     }
 
     triggers {
-        pollSCM('* * * * *') // Poll for changes every minute
+        githubPush() // Use webhook for better efficiency
     }
 
     stages {
@@ -27,12 +27,31 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                script {
+                    echo 'Running application tests...'
+                    sh 'npm test' // Update with your test command
+                }
+            }
+        }
+
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
                     echo 'Building and deploying application with Docker Compose...'
-                    sh 'docker-compose down || true' // Ignore errors if no containers are running
+                    sh 'docker-compose down || true'
                     sh 'docker-compose up -d --build'
+                    sh 'docker-compose logs'
+                }
+            }
+        }
+
+        stage('Notify Monitoring') {
+            steps {
+                script {
+                    echo 'Sending deployment metrics to Prometheus...'
+                    // Add monitoring hook here
                 }
             }
         }
