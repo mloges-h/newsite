@@ -2,15 +2,14 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/mloges-h/newsite.git'  // GitHub repository URL
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'  // Path to docker-compose.yml in your repository
+        REPO_URL = 'https://github.com/mloges-h/newsite.git'  // Replace with your repo URL
+        DOCKER_IMAGE = 'newsite-image'  // Docker image name you want to use
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the repository from GitHub
                     checkout([$class: 'GitSCM', branches: [[name: '*/master']],
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [[$class: 'CleanCheckout']],
@@ -23,21 +22,21 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install any dependencies (you can modify this if you need more steps here)
+                // Install project dependencies using npm
                 sh 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                // Build your application (modify if necessary)
+                // Build the project
                 sh 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                // Run your tests (if applicable)
+                // Run tests
                 sh 'npm test'
             }
         }
@@ -45,17 +44,21 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using your Dockerfile
-                    sh 'docker build -t newsite-image .'
+                    // Build Docker image from Dockerfile in the repo
+                    sh 'docker build -t ${DOCKER_IMAGE} .'
                 }
             }
         }
 
-        stage('Deploy with Docker Compose') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    // Deploy the application using docker-compose (this assumes your docker-compose.yml is set up properly)
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+                    // Run the Docker container from the built image
+                    sh '''
+                    docker run -d -p 80:80 \
+                        --name newsite-container \
+                        ${DOCKER_IMAGE}
+                    '''
                 }
             }
         }
@@ -63,7 +66,7 @@ pipeline {
         stage('Monitor') {
             steps {
                 script {
-                    // You can add any monitoring steps if needed
+                    // You can add monitoring or health check steps here if needed
                     echo 'Monitoring setup completed.'
                 }
             }
