@@ -1,7 +1,7 @@
-Logesh Pro1 CI/CD with Docker
+1. Logesh Pro1 CI/CD with Docker
 This project demonstrates setting up a CI/CD pipeline using Jenkins, Docker, and GitHub, along with Prometheus and Grafana for container monitoring.
 
-Table of Contents
+2. Table of Contents
 Overview
 Prerequisites
 Setup
@@ -15,14 +15,14 @@ License
 Overview
 This project aims to deploy a simple website using Apache HTTP Server in Docker. The application is built through a CI/CD pipeline powered by Jenkins. Docker containers are used for the web server and monitoring purposes, and Prometheus and Grafana are set up for tracking container performance.
 
-Prerequisites
+3. Prerequisites
 Git: Source Code Manager
 Docker: Installed on the host machine.
 Docker Compose: Used for multi-container management.
 Jenkins: Used for automating the CI/CD pipeline.
 Prometheus & Grafana: Used for monitoring and visualizing container metrics.
 
-Setup
+4. Setup
 1. Install Docker and Docker Compose
 If Docker and Docker Compose are not yet installed, you can follow the official documentation:
 Docker: https://docs.docker.com/get-docker/
@@ -37,22 +37,23 @@ Prometheus collects metrics from Docker containers and exposes them via a web in
 Grafana visualizes these metrics, providing insights into container health and performance.
 You can access Prometheus at http://<host-ip>:9090 and Grafana at http://<host-ip>:3000 to view metrics.
 
-Jenkins Pipeline
+5. Jenkins Pipeline
 The pipeline uses the Jenkinsfile located in the root of the repository. It:
 
-Clones the repository from GitHub.
+6. Clones the repository from GitHub.
 Builds the Docker image using the Dockerfile.
 Deploys the container with the latest changes.
 Notifies the user on the build status.
-Docker Configuration
+
+7. Docker Configuration
 The Docker setup consists of multiple containers:
 
-Web server (Apache HTTPD): The main application runs inside an Apache HTTP Server container.
+8. Web server (Apache HTTPD): The main application runs inside an Apache HTTP Server container.
 Prometheus: Collects container metrics.
 Grafana: Visualizes Prometheus metrics.
 The Docker setup is defined in the docker-compose.yml file, which runs all the containers required for the project.
 
-yaml
+9. yaml
 
 version: '3.3'
 
@@ -79,7 +80,7 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 
-Repository Structure
+10. Repository Structure
 logesh-pro1/
 ├── css/
 ├── images/
@@ -96,12 +97,12 @@ logesh-pro1/
 ├── docker-compose.yml
 └── index.html
 
-Dockerfile: Defines how to build the Apache HTTP Server container.
+11. Dockerfile: Defines how to build the Apache HTTP Server container.
 Jenkinsfile: Defines the pipeline for building and deploying the Docker container.
 docker-compose.yml: Defines the multi-container setup, including the web server and monitoring services.
 newsite/: Contains the website’s HTML, CSS, and JavaScript files.
 
-Usage
+12. Usage
 
 1. Clone the Repository
 Clone this repository to your local machine:
@@ -121,5 +122,5 @@ Prometheus metrics can be accessed at http://<host-ip>:9090 and Grafana at http:
 Contributing
 Feel free to fork this repository, make changes, and submit pull requests. Contributions are welcome!
 
-License
+13. License
 This project is licensed under the MIT License.
