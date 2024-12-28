@@ -104,23 +104,23 @@ logesh-pro1/
 
 ### 12. Usage
 
-1. Clone the Repository
+* Clone the Repository
 Clone this repository to your local machine:
 git clone https://github.com/mloges-h/logesh-pro1.git
 cd logesh-pro1
 
-2. Build and Run Docker Containers
+* Build and Run Docker Containers
 You can build and start the Docker containers using Docker Compose:
 docker-compose up --build
 
-3. Access the Web Server
+* Access the Web Server
 The Apache web server is accessible at http://<host-ip>:81.
 
-4. Monitoring
+* Monitoring
 Prometheus metrics can be accessed at http://<host-ip>:9090 and Grafana at http://<host-ip>:3000.
 
-Contributing
+* Contributing
 Feel free to fork this repository, make changes, and submit pull requests. Contributions are welcome!
 
-13. License
+* License
 This project is licensed under the MIT License.
