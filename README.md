@@ -1,4 +1,4 @@
-### 1. Logesh Pro1 CI/CD with Docker
+### 1. CI/CD with Docker
 This project demonstrates setting up a CI/CD pipeline using Jenkins, Docker, and GitHub, along with Prometheus and Grafana for container monitoring.
 
 ### 2. Table of Contents
