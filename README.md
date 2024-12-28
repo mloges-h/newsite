@@ -23,7 +23,7 @@ This project aims to deploy a simple website using Apache HTTP Server in Docker.
 * Prometheus & Grafana: Used for monitoring and visualizing container metrics.
 
 ### 4. Setup
-1. Install Docker and Docker Compose
+Install Docker and Docker Compose
 If Docker and Docker Compose are not yet installed, you can follow the official documentation:
 Docker: https://docs.docker.com/get-docker/
 Docker Compose: https://docs.docker.com/compose/install/
