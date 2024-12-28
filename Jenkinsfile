@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'custom-httpd'
         REPO_URL = 'https://github.com/mloges-h/newsite.git'
         BRANCH_NAME = 'master'
     }
@@ -11,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the code from GitHub
+                    // Checkout code from the GitHub repository
                     checkout([$class: 'GitSCM', 
                               branches: [[name: "*/${BRANCH_NAME}"]], 
                               doGenerateSubmoduleConfigurations: false, 
@@ -25,20 +24,19 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using the Dockerfile in the repository
-                    sh 'docker build -t ${IMAGE_NAME}:latest .'
+                    // Build the Docker image from the existing Dockerfile
+                    sh 'docker build -t custom-httpd:latest .'
                 }
             }
         }
 
-        stage('Deploy Docker Container') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    // Deploy the Docker container
+                    // Run the Docker container from the built image
                     sh '''
-                    docker stop custom-httpd-container || true
-                    docker rm custom-httpd-container || true
-                    docker run -d -p 81:80 --name custom-httpd-container ${IMAGE_NAME}:latest
+                    docker rm -f custom-httpd-container || true
+                    docker run -d -p 81:80 --name custom-httpd-container custom-httpd:latest
                     '''
                 }
             }
@@ -47,13 +45,15 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment succeeded!'
+            echo 'Build and deployment succeeded!'
         }
         failure {
-            echo 'Deployment failed. Please check the logs.'
+            echo 'Build or deployment failed.'
         }
         always {
             echo 'Pipeline execution completed.'
+            // Clean workspace to ensure no residual files are left
+            cleanWs()
         }
     }
 }
