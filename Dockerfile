@@ -1,17 +1,16 @@
 FROM httpd:latest
 
-# Install Git
+# Install necessary packages
 RUN apt-get update && apt-get install -y git
 
-# Set the working directory to Apache's htdocs
+# Change to the htdocs directory
 WORKDIR /usr/local/apache2/htdocs
 
-# Clean the htdocs directory
-RUN rm -rf /usr/local/apache2/htdocs/*
+# Clear the directory and initialize an empty git repository
+RUN rm -rf ./* && git init
 
-# Clone the Git repository into the htdocs directory
+# Clone your repository into the htdocs directory
 RUN git clone https://github.com/mloges-h/newsite.git .
 
-# Expose port 80 for Apache
+# Optional: Expose the default Apache port
 EXPOSE 80
-
