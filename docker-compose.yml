@@ -5,5 +5,6 @@ services:
     build: .  # Build the image using the Dockerfile in the current directory
     ports:
       - "80:80"  # Map container's port 80 to host's port 80
+    volumes:
+      - /opt:/usr/local/apache2/htdocs  # Mount /opt from the host to /usr/local/apache2/htdocs in the container
     restart: always
-
