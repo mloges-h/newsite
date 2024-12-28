@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image from the existing Dockerfile
-                    sh 'docker build -t custom-httpd:latest .'
+                    sh 'docker build -t httpd:latest .'
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Run the Docker container from the built image
                     sh '''
-                    docker rm -f custom-httpd-container || true
+                    docker rm -f httpd-container || true
                     docker run -d -p 81:80 --name custom-httpd-container custom-httpd:latest
                     '''
                 }
