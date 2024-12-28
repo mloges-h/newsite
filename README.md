@@ -124,3 +124,7 @@ Feel free to fork this repository, make changes, and submit pull requests. Contr
 
 * License
 This project is licensed under the MIT License.
+
+
+
+https://medium.com/@shubhamprajapati032/devops-monitoring-and-automation-tool-using-jenkins-prometheus-grafana-and-docker-52d3aadfcaec
